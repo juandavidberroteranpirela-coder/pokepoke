@@ -1,12 +1,11 @@
-﻿/**
+/**
  * modules/auth_screen.js
  * Pantalla de inicio GBA — Login / Registro real contra la API FastAPI.
  * Llama a window.onPlayerAuthenticated(session) al autenticar.
  */
 "use strict";
 (function (window) {
-  const BASE_URL = window.location.port === '8000' || window.location.port === '3000'
-    ? window.location.origin : 'http://127.0.0.1:8000';
+  const BASE_URL = window.location.protocol === 'file:' ? 'http://127.0.0.1:8000' : window.location.origin;
 
   const CSS = `
     #authScreen{position:fixed;inset:0;z-index:99999;background:radial-gradient(ellipse at 60% 40%,#0d1b3e 0%,#060c1a 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Inter','Segoe UI',sans-serif;overflow:hidden;color:#e8eaf6;transition:opacity .6s ease;}

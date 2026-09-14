@@ -45,9 +45,7 @@
 
   class GameClient {
     constructor(baseUrl = '') {
-      this.baseUrl = baseUrl || (window.location.port === '8000' || window.location.port === '3000'
-        ? window.location.origin
-        : 'http://127.0.0.1:8000');
+      this.baseUrl = baseUrl || (window.location.protocol === 'file:' ? 'http://127.0.0.1:8000' : window.location.origin);
       this.token = sessionStorage.getItem('hoennTrainerToken') || null;
       this.isOnline = false;
       this.lastHealthCheck = 0;
@@ -345,9 +343,7 @@
       }
 
       const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const wsHost = window.location.port === '8000' || window.location.port === '3000'
-        ? window.location.host
-        : '127.0.0.1:8000';
+      const wsHost = window.location.protocol === 'file:' ? '127.0.0.1:8000' : window.location.host;
 
       let wsUrl = `${wsProtocol}//${wsHost}/ws/lobby?trainer_id=${encodeURIComponent(trainerId)}&trainer_name=${encodeURIComponent(trainerName)}`;
       if (token) wsUrl += `&token=${encodeURIComponent(token)}`;
