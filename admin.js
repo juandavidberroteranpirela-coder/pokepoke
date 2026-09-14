@@ -1023,13 +1023,16 @@ window.PVP_BUILD_VERSION = 23;
       <div class="em-submenu-title">¿QUÉ HACER?</div>
       <div class="em-moves-grid">
         ${playerMoves.map((m, idx) => {
-          const typeCls = typeClsOf(m);
-          const disabled = (m.currentPp != null ? m.currentPp : m.pp) <= 0;
+          const mType = m.type || m.elemental_type || 'Normal';
+          const typeCls = 'em-type-' + mType.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+          const currentPpVal = m.currentPp != null ? m.currentPp : (m.current_pp != null ? m.current_pp : m.pp);
+          const maxPpVal = m.maxPp != null ? m.maxPp : (m.max_pp != null ? m.max_pp : m.pp);
+          const disabled = currentPpVal <= 0;
           return `
             <button class="em-move-cell ${disabled ? 'em-disabled' : ''}" onclick="App.executeBattleMove(${idx})" ${disabled ? 'disabled' : ''}>
-              <span class="em-move-type ${typeCls}">${(m.type || 'Normal').toUpperCase()}</span>
+              <span class="em-move-type ${typeCls}">${mType.toUpperCase()}</span>
               <span class="em-move-name">${Validate.escHtml(m.name)}</span>
-              <span class="em-move-pp">${m.currentPp != null ? m.currentPp : m.pp}/${m.maxPp != null ? m.maxPp : m.pp}</span>
+              <span class="em-move-pp">${currentPpVal}/${maxPpVal}</span>
             </button>
           `;
         }).join('')}
@@ -2440,9 +2443,15 @@ window.PVP_BUILD_VERSION = 23;
     if (moveIndex >= moves.length) return;
     const move = moves[moveIndex] || moves[0];
     if (!move) return;
-    const curPp = move.currentPp != null ? move.currentPp : move.pp;
+    
+    // Normalize pp keys
+    let curPp = move.currentPp != null ? move.currentPp : (move.current_pp != null ? move.current_pp : move.pp);
     if (curPp <= 0) return;
-    move.currentPp = curPp - 1;
+    
+    // Decrease pp
+    curPp -= 1;
+    move.currentPp = curPp;
+    move.current_pp = curPp;
 
     // Daño calculado con motor GBA Gen 3 (Efectividad + STAB + Crítico)
     const pDmgResult = window.GameBattle ? window.GameBattle.calculateDamage({
