@@ -43,6 +43,7 @@ from monster_engine.models import (
     LobbyPlayer,
     LobbyTrainerState,
     NPCBattleRequest,
+    WildBattleRequest,
     StoreBuyRequest,
     Move,
     MoveCategory,

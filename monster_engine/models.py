@@ -473,6 +473,12 @@ class NPCBattleRequest(BaseModel):
     transformation: Optional[MutationForm] = None
 
 
+class WildBattleRequest(BaseModel):
+    zone_id: str
+    wild_name: str
+    level: int
+
+
 class BattleTurnResult(BaseModel):
     battle_id: str
     turn_number: int
